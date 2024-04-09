@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myfc.model.Player;
-import com.myfc.repo.PlayerRepository;
+import com.myfc.service.PlayerService;
 
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
 	
 	@Autowired
-    private PlayerRepository playerRepository;
+	PlayerService playerService;
     
     private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
     
@@ -33,7 +33,7 @@ public class PlayerController {
 	@GetMapping
     public ResponseEntity<List<Player>> getPlayers(){
     	LOG.info("GET /api/players api called for getting all the players");
-        List<Player> players = playerRepository.findAll();
+        List<Player> players = playerService.getPlayers();
         if(players.isEmpty()){
         	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -45,17 +45,17 @@ public class PlayerController {
     public ResponseEntity<Player> createUser(@RequestBody Player player){
     	LOG.info("POST /api/players endpoint called with user: {}", player);
     	try {
-    		Player newplayer = playerRepository.save(player);
+    		Player newplayer = playerService.addPlayer(player);
     		return new ResponseEntity<>(newplayer, HttpStatus.CREATED);
     	} catch(Exception e) {
     		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     }
     
-    //Retrieve player details by pnumber
-    @GetMapping("/{pnumber}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable("pnumber") Integer pnumber) {
-        Optional<Player> playerdata = playerRepository.findById(pnumber);
+    //Retrieve player details by playernumber
+    @GetMapping("/{playernumber}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable("playernumber") Integer playernumber) {
+        Optional<Player> playerdata = playerService.getPlayerByNumber(playernumber);
         if (playerdata.isPresent()) {
             return new ResponseEntity<>(playerdata.get(), HttpStatus.OK);
         } else {
@@ -63,27 +63,22 @@ public class PlayerController {
         }
     }
     
-    // Update a Player by pnumber
-    @PutMapping("/{pnumber}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable("pnumber") Integer pnumber, @RequestBody Player Player) {
-        Optional<Player> playerData = playerRepository.findById(pnumber);
-        if (playerData.isPresent()) {
-            Player updatedPlayer = playerData.get();
-            updatedPlayer.setAge(Player.getAge());
-            updatedPlayer.setPlayerName(Player.getPlayerName());
-            updatedPlayer.setPlayerNumber(Player.getPlayerNumber());
-            updatedPlayer.setPosition(Player.getPosition());
-            return new ResponseEntity<>(playerRepository.save(updatedPlayer), HttpStatus.OK);
+    // Update a Player by playernumber
+    @PutMapping("/{playernumber}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable("playernumber") Integer playernumber, @RequestBody Player player) {
+        Player updatePlayer = playerService.updatePlayer(playernumber,player);
+        if(updatePlayer!=null) {
+        	return new ResponseEntity<>(updatePlayer, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     
-    // Remove a player by pnumber
-    @DeleteMapping("/{pnumber}")
-    public ResponseEntity<HttpStatus> deleteNote(@PathVariable("pnumber") Integer pnumber) {
+    // Remove a player by playernumber
+    @DeleteMapping("/{playernumber}")
+    public ResponseEntity<HttpStatus> removePlayer(@PathVariable("playernumber") Integer playernumber) {
         try {
-            playerRepository.deleteById(pnumber);
+            playerService.removePlayerByNumber(playernumber);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
