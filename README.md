@@ -9,3 +9,5 @@ The registration of a new player through the UI and API has been successfully co
 
 Technologies Used:
 The application has been developed using Spring Boot, Spring Data JPA, an Embedded H2 Database, and a RESTful API.
+
+![Screenshot_20240411_142125-1](https://github.com/mayakrishnan2001/MyFootballClub/assets/60906154/acf3138e-af99-4041-937d-7109b3d6a297)
