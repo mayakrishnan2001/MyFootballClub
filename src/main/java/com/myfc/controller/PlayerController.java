@@ -26,72 +26,72 @@ import com.myfc.service.PlayerService;
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
-	
+
 	@Autowired
 	PlayerService playerService;
-	
-    
-    private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
-    
-    // Retrieve all the Players
+
+	private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
+
+	// Retrieve all the Players
 	@GetMapping
-    public ResponseEntity<List<Player>> getPlayers(){
-    	LOG.info("GET /api/players api called for getting all the players");
-        List<Player> players = playerService.getPlayers();
-        if(players.isEmpty()){
-        	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(players,HttpStatus.OK);
+	public ResponseEntity<List<Player>> getPlayers() {
+		LOG.info("GET /api/players api called for getting all the players");
+		List<Player> players = playerService.getPlayers();
+		if (players.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(players, HttpStatus.OK);
 	}
-	
+
 	// Add new player
-    @PostMapping
-    public ResponseEntity<Player> createUser(@ModelAttribute Player player, @RequestParam("image") MultipartFile file){
-    	LOG.info("POST /api/players endpoint called with user: {}", player);
-    	
-    	try {
-    		if(file.isEmpty()) {
-    			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    		}
-            player.setPlayerPhoto(file.getBytes());
-    		Player newplayer = playerService.addPlayer(player);
-    		return new ResponseEntity<>(newplayer, HttpStatus.CREATED);
-    	} catch(Exception e) {
-    		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-    }
-    
-    //Retrieve player details by playernumber
-    @GetMapping("/{playernumber}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable("playernumber") Integer playernumber) {
-        Optional<Player> playerdata = playerService.getPlayerByNumber(playernumber);
-        if (playerdata.isPresent()) {
-            return new ResponseEntity<>(playerdata.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    
-    // Update a Player by playernumber
-    @PutMapping("/{playernumber}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable("playernumber") Integer playernumber, @RequestBody Player player) {
-        Player updatePlayer = playerService.updatePlayer(playernumber,player);
-        if(updatePlayer!=null) {
-        	return new ResponseEntity<>(updatePlayer, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    
-    // Remove a player by playernumber
-    @DeleteMapping("/{playernumber}")
-    public ResponseEntity<HttpStatus> removePlayer(@PathVariable("playernumber") Integer playernumber) {
-        try {
-            playerService.removePlayerByNumber(playernumber);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+	@PostMapping
+	public ResponseEntity<Player> createUser(@ModelAttribute Player player, @RequestParam("image") MultipartFile file) {
+		LOG.info("POST /api/players endpoint called with user: {}", player);
+
+		try {
+			if (file.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			player.setPlayerPhoto(file.getBytes());
+			Player newplayer = playerService.addPlayer(player);
+			return new ResponseEntity<>(newplayer, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// Retrieve player details by playernumber
+	@GetMapping("/{playernumber}")
+	public ResponseEntity<Player> getPlayerById(@PathVariable("playernumber") Integer playernumber) {
+		Optional<Player> playerdata = playerService.getPlayerByNumber(playernumber);
+		if (playerdata.isPresent()) {
+			return new ResponseEntity<>(playerdata.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Update a Player by playernumber
+	@PutMapping("/{playernumber}")
+	public ResponseEntity<Player> updatePlayer(@PathVariable("playernumber") Integer playernumber,
+			@RequestBody Player player) {
+		Player updatePlayer = playerService.updatePlayer(playernumber, player);
+		if (updatePlayer != null) {
+			return new ResponseEntity<>(updatePlayer, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Remove a player by playernumber
+	@DeleteMapping("/{playernumber}")
+	public ResponseEntity<HttpStatus> removePlayer(@PathVariable("playernumber") Integer playernumber) {
+		try {
+			playerService.removePlayerByNumber(playernumber);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }

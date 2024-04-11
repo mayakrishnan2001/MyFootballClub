@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.myfc.model.Player;
 
 @Repository
-public interface PlayerRepository extends JpaRepository<Player, Integer>{
+public interface PlayerRepository extends JpaRepository<Player, Integer> {
 
 }
