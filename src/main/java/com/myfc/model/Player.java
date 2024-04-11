@@ -2,6 +2,7 @@ package com.myfc.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 @Entity
@@ -12,6 +13,17 @@ public class Player {
 	private String playerName;
 	private int age;
 	private String position;
+	
+	@Lob
+	private byte[] playerPhoto;
+	
+	
+	public byte[] getPlayerPhoto() {
+		return playerPhoto;
+	}
+	public void setPlayerPhoto(byte[] playerPhoto) {
+		this.playerPhoto = playerPhoto;
+	}
 	public Integer getPlayerNumber() {
 		return playerNumber;
 	}

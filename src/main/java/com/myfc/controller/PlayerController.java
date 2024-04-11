@@ -10,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.myfc.model.Player;
 import com.myfc.service.PlayerService;
@@ -26,6 +29,7 @@ public class PlayerController {
 	
 	@Autowired
 	PlayerService playerService;
+	
     
     private static final Logger LOG = LoggerFactory.getLogger(PlayerController.class);
     
@@ -42,9 +46,14 @@ public class PlayerController {
 	
 	// Add new player
     @PostMapping
-    public ResponseEntity<Player> createUser(@RequestBody Player player){
+    public ResponseEntity<Player> createUser(@ModelAttribute Player player, @RequestParam("image") MultipartFile file){
     	LOG.info("POST /api/players endpoint called with user: {}", player);
+    	
     	try {
+    		if(file.isEmpty()) {
+    			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    		}
+            player.setPlayerPhoto(file.getBytes());
     		Player newplayer = playerService.addPlayer(player);
     		return new ResponseEntity<>(newplayer, HttpStatus.CREATED);
     	} catch(Exception e) {
