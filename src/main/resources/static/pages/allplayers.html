@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Football World - Players</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+		.players-container {
+			background-color: transparent;
+		    max-width: 800px;
+		    margin: 0 auto;
+		    padding: 20px;
+		    display: flex;
+		    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		    gap: 20px;
+			
+		}
+		
+		.player {
+		    background-color: transparent;
+		    padding: 20px;
+		    border-radius: 8px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    display: flex;
+		    flex-direction: column; /* Display items vertically */
+		}
+		
+		.player img {
+		    width: 100px; /* Set a fixed width for player images */
+		    border-radius: 8px;
+		    margin-bottom: 20px; /* Add margin to separate image and text */
+		}
+		
+		.player-info {
+		    text-align: center; /* Center player info */
+		}
+		
+		.player p {
+		    margin: 1px 0;
+		}
+		h2{
+		   text-align: center;
+		}
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../icons/pngfind.com-champion-logo-png-957103.png" class="logo">
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="players.html">Players</a>
+            <a href="#">Clubs</a>
+            <a href="#">About us</a>
+        </nav>
+    </header>
+    <div class="players-container">
+        <h2>All Football Players</h2>
+        <div class="player">
+            <img src="player1.jpg" alt="Player 1">
+            <p>Player Number: 10</p>
+            <p>Name: John Doe</p>
+            <p>Age: 25</p>
+            <p>Position: Forward</p>
+        </div>
+        <div class="player">
+            <img src="player2.jpg" alt="Player 2">
+            <p>Player Number: 7</p>
+            <p>Name: Jane Smith</p>
+            <p>Age: 23</p>
+            <p>Position: Midfielder</p>
+        </div>
+        <!-- Add more players as needed -->
+    </div>
+</body>
+</html>

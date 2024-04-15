@@ -5,26 +5,25 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault(); // Prevent the default form submission behavior
 
         // Get form data
-        const playerNumber = document.getElementById("playerNumber").value;
-        const playerName = document.getElementById("playerName").value;
-        const age = document.getElementById("age").value;
-        const position = document.getElementById("position").value;
-
-        // Create player object
+        const formData = new FormData(playerForm);
         const playerData = {
-            playerNumber: playerNumber,
-            playerName: playerName,
-            age: age,
-            position: position
+            playerNumber: formData.get("playerNumber"),
+            playerName: formData.get("playerName"),
+            age: formData.get("age"),
+            position: formData.get("position")
         };
+
+        // Get the file input
+        const fileInput = document.getElementById("image");
+        const file = fileInput.files[0]; // Get the first file (assuming single file upload)
+
+        // Append the file to the FormData object
+        formData.append("image", file);
 
         // Send POST request to server
         fetch("/api/players", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(playerData)
+            body: formData
         })
         .then(response => {
             if (response.ok) {
